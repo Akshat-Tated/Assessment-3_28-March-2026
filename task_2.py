@@ -1,0 +1,49 @@
+from selenium.webdriver import Chrome,ChromeOptions
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from time import sleep
+
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+o = ChromeOptions()
+o.add_experimental_option("detach",True)
+o.add_argument("--disable-notifications")
+driver = Chrome(options=o)
+#driver is holding the browser
+
+driver.get("https://www.myntra.com/")
+driver.maximize_window()
+driver.implicitly_wait(100)
+
+actions = ActionChains(driver)
+ele = driver.find_element(By.XPATH,'//a[@href="/shop/fwd-women"][1]')
+actions.move_to_element(ele).pause(2).perform()
+
+wait = WebDriverWait(driver, 10)
+ele = wait.until(EC.visibility_of_element_located((By.XPATH,'//a[@data-reactid="837"]')))
+ele.click()
+
+gender = driver.find_element(By.XPATH,'//input[@value="men,men women"]')
+actions.click(gender).perform()
+sleep(3)
+
+brand = driver.find_element(By.XPATH,'//input[@value="Rigo"]')
+actions.click(brand).perform()
+sleep(3)
+
+sort_by = driver.find_element(By.XPATH,'//div[@class="sort-sortBy"]')
+actions.move_to_element(sort_by).pause(2).release().perform()
+
+hover_ele = driver.find_element(By.XPATH,'//ul[@class="sort-list"]//li[3]//input')
+actions.move_to_element(sort_by).click().perform()
+# driver.find_element(By.XPATH,'//input[@value="popularity"]').click()
+sleep(3)
+driver.find_element(By.XPATH,'//img[@title="Rigo Typography Printed Fleece Oversized Varsity Jacket"]').click()
+sleep(3)
+driver.switch_to.window(driver.window_handles[1])
+driver.find_element(By.XPATH,'//div[@class="size-buttons-buttonContainer"][1]').click()
+sleep(3)
+driver.find_element(By.XPATH,'//span[@class="myntraweb-sprite pdp-whiteBag sprites-whiteBag pdp-flex pdp-center"]').click()
+sleep(3)
+driver.quit()
